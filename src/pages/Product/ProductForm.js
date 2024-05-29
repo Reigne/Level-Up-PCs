@@ -4,11 +4,18 @@ import { Button, Input, message, Select, Upload } from "antd";
 import { allCategories, clearErrors } from "../../actions/categoryActions";
 import { allBrands } from "../../actions/brandActions";
 import { UploadOutlined } from "@ant-design/icons";
-import { createProduct } from "../../actions/productActions";
+import {
+  allProducts,
+  createProduct,
+  resetUpdateProduct,
+  updateProduct,
+} from "../../actions/productActions";
 
-export default function ProductForm() {
+export default function ProductForm({ product, setShowForm, productId }) {
+  console.log(product, "xxxxxxxxxxxx");
   const dispatch = useDispatch();
 
+  const [item, setItem] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -23,9 +30,9 @@ export default function ProductForm() {
   const { TextArea } = Input;
 
   const {
-    error: productError,
-    loading: productLoading,
-    success: productSuccess,
+    error: createError,
+    loading: createLoading,
+    success: createSuccess,
     products,
   } = useSelector((state) => state.createProduct);
 
@@ -42,6 +49,34 @@ export default function ProductForm() {
     success: brandSuccess,
     brands,
   } = useSelector((state) => state.brands);
+
+  const {
+    errorUpdate: errorUpdate,
+    loading: loading,
+    updateSuccess: updateSuccess,
+  } = useSelector((state) => state.updateProduct);
+
+  useEffect(() => {
+    if (productId) {
+      console.log("walang id");
+      setItem(product);
+      setName(product.name);
+      setPrice(product.price);
+      setStock(product.stock);
+      setDescription(product.description);
+      setCategory(product.category._id);
+      setBrand(product.brand._id);
+    } else {
+      console.log("walang id");
+      setItem(null);
+      setName("");
+      setPrice("");
+      setStock("");
+      setDescription("");
+      setCategory("");
+      setBrand("");
+    }
+  }, [product, productId]);
 
   const validateForm = () => {
     let errors = {};
@@ -101,7 +136,6 @@ export default function ProductForm() {
     label: brand.name,
   }));
 
-
   const beforeUpload = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -119,17 +153,15 @@ export default function ProductForm() {
   };
 
   const submitHandler = async () => {
-    console.log("images", images);
-
-    if (!validateForm()) {
-      return;
-    }
+    // if (!validateForm()) {
+    //   return;
+    // }
 
     const formData = new FormData();
 
     formData.append("name", name);
     formData.append("price", price);
-    formData.append("quantity", quantity);
+    // formData.append("quantity", quantity);
     formData.append("description", description);
     formData.append("stock", stock);
     formData.append("category", category);
@@ -138,37 +170,32 @@ export default function ProductForm() {
       formData.append("images", image);
     });
 
-    dispatch(createProduct(formData));
-    // setIsloading(true);
+    console.log("images", images);
 
-    // Here you can add the code to submit the form data to your server
-  };
-
-  const onChange = (e) => {
-    console.log(e, "eeeeeee");
-    const files = Array.from(e.files);
-
-    setImages([]);
-
-    files.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImages((oldArray) => [...oldArray, reader.result]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+    if (item !== null) {
+      console.log(product, "update");
+      dispatch(updateProduct(product._id, formData));
+      setIsloading(true);
+    } else {
+      dispatch(createProduct(formData));
+      setIsloading(true);
+    }
   };
 
   useEffect(() => {
-    if (productSuccess) {
+    if (createSuccess) {
       message.success("Product created successfully");
-      // dispatch()
       setIsloading(false);
     }
-  }, [productSuccess]);
+
+    if (updateSuccess) {
+      message.success("Product updated successfully");
+      dispatch(resetUpdateProduct());
+      dispatch(allProducts());
+      setShowForm(false);
+      setIsloading(false);
+    }
+  }, [createSuccess, updateSuccess]);
 
   return (
     <div className="flex flex-col min-h-screen w-full max-w-[28rem] p-4 bg-white sticky top-0">
@@ -224,22 +251,20 @@ export default function ProductForm() {
 
               <div className="space-y-1">
                 <p>
-                  Quantity <span className="text-red-500">*</span>
+                  Stock <span className="text-red-500">*</span>
                 </p>
                 <Input
-                  placeholder="Product quantity"
+                  placeholder="Product stock"
                   variant="filled"
                   size="large"
                   type="text"
-                  name="quantity"
-                  onChange={(e) => setQuantity(e.target.value)}
-                  value={quantity}
-                  status={errors.quantity ? "error" : null}
+                  name="stock"
+                  onChange={(e) => setStock(e.target.value)}
+                  value={stock}
+                  status={errors.stock ? "error" : null}
                 />
-                {errors.quantity && (
-                  <span className="text-red-500 text-sm">
-                    {errors.quantity}
-                  </span>
+                {errors.stock && (
+                  <span className="text-red-500 text-sm">{errors.stock}</span>
                 )}
               </div>
             </div>
@@ -259,14 +284,14 @@ export default function ProductForm() {
                 value={description}
                 status={errors.description ? "error" : null}
               />
-              {errors.quantity && (
+              {errors.description && (
                 <span className="text-red-500 text-sm">
                   {errors.description}
                 </span>
               )}
             </div>
 
-            <div className="space-y-1">
+            {/* <div className="space-y-1">
               <p>
                 Stock <span className="text-red-500">*</span>
               </p>
@@ -283,7 +308,7 @@ export default function ProductForm() {
               {errors.stock && (
                 <span className="text-red-500 text-sm">{errors.stock}</span>
               )}
-            </div>
+            </div> */}
 
             <div className="space-y-1">
               <p>
@@ -359,7 +384,9 @@ export default function ProductForm() {
           Submit
         </Button>
 
-        <Button size="large">Cancel</Button>
+        <Button size="large" onClick={() => setShowForm(false)}>
+          Cancel
+        </Button>
       </div>
     </div>
   );

@@ -13,14 +13,22 @@ import {
 } from "../../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import ProductList from "./ProductList";
+import Swal from "sweetalert2";
 
 export default function Products() {
   const [showForm, setShowForm] = useState(false);
+  const [productId, setProductId] = useState("");
 
   const dispatch = useDispatch();
 
   const { error, loading, success, products } = useSelector(
     (state) => state.products
+  );
+
+  const { product } = useSelector((state) => state.singleProduct);
+
+  const { errorDelete, isDeleted } = useSelector(
+    (state) => state.deleteProduct
   );
 
   useEffect(() => {
@@ -32,7 +40,50 @@ export default function Products() {
     }
   }, [success, error, dispatch]);
 
-  console.log(products);
+  const toggleUpdate = async (id) => {
+    await dispatch(singleProduct(id));
+    setProductId(id);
+    setShowForm(true);
+  };
+
+  const toggleCreate = () => {
+    setProductId("");
+    setShowForm(true);
+  };
+
+  const deleteHandler = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteProduct(id));
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (isDeleted) {
+      message.success("Product deleted successfully");
+      dispatch(allProducts());
+      dispatch(resetDeleteProduct());
+    }
+
+    if (errorDelete) {
+      message.error(errorDelete);
+    }
+  }, [isDeleted, errorDelete, dispatch]);
 
   return (
     <div className="flex relative  bg-zinc-100">
@@ -45,14 +96,19 @@ export default function Products() {
           <div className="flex flex-row justify-between items-center">
             <span className="text-2xl font-bold">All Products</span>
 
-            <Button onClick={() => setShowForm(!showForm)} type="primary">
+            <Button onClick={() => toggleCreate()} type="primary">
               + Create Product
             </Button>
           </div>
 
           <div className="bg-white rounded p-4">
             <div className="card">
-              <ProductList products={products} />
+              <ProductList
+                products={products}
+                toggleUpdate={toggleUpdate}
+                setShowForm={setShowForm}
+                deleteHandler={deleteHandler}
+              />
               {/* <DataTable value={products} tableStyle={{ minWidth: "50rem" }}>
                 <Column field="name" header="Name"></Column>
                 <Column field="price" header="Price"></Column>
@@ -66,7 +122,7 @@ export default function Products() {
 
       {showForm && (
         <div className="sticky top-0 w-full max-w-[24rem]">
-          <ProductForm setShowForm={setShowForm} />
+          <ProductForm setShowForm={setShowForm} product={product} productId={productId}/>
         </div>
       )}
     </div>

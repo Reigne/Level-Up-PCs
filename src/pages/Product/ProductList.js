@@ -6,7 +6,7 @@ import { message, Button, Image } from "antd";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { EyeOutlined, SearchOutlined } from "@ant-design/icons";
 
-export default function ProductList({ products }) {
+export default function ProductList({ products, toggleUpdate, deleteHandler }) {
   const imageBodyTemplate = (rowData) => {
     return (
       <Image
@@ -27,16 +27,10 @@ export default function ProductList({ products }) {
           // onClick={() => toggleUpdate(rowData._id)}
           icon={<EyeOutlined />}
         ></Button>
-        <Button
-          type="primary"
-          // onClick={() => toggleUpdate(rowData._id)}
-        >
+        <Button type="primary" onClick={() => toggleUpdate(rowData._id)}>
           Edit
         </Button>
-        <Button
-          danger
-          // onClick={() => deleteHandler(rowData._id)}
-        >
+        <Button danger onClick={() => deleteHandler(rowData._id)}>
           Delete
         </Button>
       </div>
@@ -73,28 +67,28 @@ export default function ProductList({ products }) {
         className="font-semibold"
         field="name"
         header="Name"
-        style={{ minWidth: "20rem" }}
+        style={{ minWidth: "10rem" }}
       ></Column>
       <Column
         // className="font-semibold "
         field="brand"
         header="Brand"
         body={brand}
-        style={{ minWidth: "15rem" }}
+        style={{ minWidth: "10rem" }}
       ></Column>
       <Column
         // className="font-semibold "
         field="category"
         header="Category"
         body={category}
-        style={{ minWidth: "15rem" }}
+        style={{ minWidth: "10zrem" }}
       ></Column>
       <Column
         className="font-semibold"
         field="price"
         header="Price"
         body={formatCurrency}
-        style={{ minWidth: "15rem" }}
+        style={{ minWidth: "10rem" }}
       ></Column>
       <Column
         field="image"
@@ -106,7 +100,7 @@ export default function ProductList({ products }) {
         header="Actions"
         body={actionBodyTemplate}
         exportable={false}
-        style={{ minWidth: "10rem" }}
+        style={{ minWidth: "5rem" }}
       ></Column>
     </DataTable>
   );
