@@ -15,7 +15,7 @@ export default function Navbar() {
 
       <div className="flex flex-row space-x-8">
         <div>
-          <a className="">Home</a>
+          <a className="" href="/">Home</a>
         </div>
         <div>
           <a className="">Shop</a>
@@ -26,11 +26,13 @@ export default function Navbar() {
       </div>
 
       <div className="flex flex-row space-x-8 items-center">
-        <div className="bg-blue-500 py-2 px-6 rounded-full">
-          <a className=" text-white">Sign Up</a>
-        </div>
+        <a className="bg-blue-500 py-2 px-6 rounded-full" href="/signup">
+          <span className=" text-white" >Sign Up</span>
+        </a>
         <div>
-          <a className="" href="/login">Sign In</a>
+          <a className="" href="/login">
+            Sign In
+          </a>
         </div>
       </div>
     </nav>
