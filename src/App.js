@@ -15,7 +15,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 export default function App() {
   return (
     <div className="flex flex-col h-screen">
-      {/* <Navbar /> */}
+      <Navbar />
 
       <Routes>
         <Route path="/" element={<Home />} />
