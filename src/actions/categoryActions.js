@@ -32,7 +32,7 @@ export const createCategory = (categoryData) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/api/v1/category/create/`,
+      `${process.env.REACT_APP_API}/api/v1/category/create/`,
       categoryData,
       config
     );
@@ -54,7 +54,7 @@ export const createCategory = (categoryData) => async (dispatch) => {
 export const allCategories = () => async (dispatch) => {
   try {
     dispatch({ type: ALL_CATEGORY_REQUEST });
-    const { data } = await axios.get("/api/v1/categories");
+    const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/categories`);
 
     dispatch({
       type: ALL_CATEGORY_SUCCESS,
@@ -72,7 +72,7 @@ export const singleCategory = (id) => async (dispatch) => {
   try {
     dispatch({ type: SINGLE_CATEGORY_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/category/${id}`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/category/${id}`);
 
     dispatch({
       type: SINGLE_CATEGORY_SUCCESS,
@@ -95,7 +95,7 @@ export const updateCategory = (id, categoryData) => async (dispatch) => {
       },
     };
     const { data } = await axios.put(
-      `/api/v1/category/${id}`,
+      `${process.env.REACT_APP_API}/api/v1/category/${id}`,
       categoryData,
       config
     );
@@ -124,7 +124,7 @@ export const resetDeleteCategory = () => (dispatch) => {
 export const deleteCategory = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_CATEGORY_REQUEST });
-    const { data } = await axios.delete(`/api/v1/category/${id}`);
+    const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/category/${id}`);
     dispatch({
       type: DELETE_CATEGORY_SUCCESS,
       payload: data,

@@ -33,7 +33,7 @@ export const createBrand = (brandData) => async (dispatch) => {
 
 
     const { data } = await axios.post(
-      `/api/v1/brand/create`,
+      `${process.env.REACT_APP_API}/api/v1/brand/create`,
       brandData,
       config
     );
@@ -57,7 +57,7 @@ export const createBrand = (brandData) => async (dispatch) => {
 export const allBrands = () => async (dispatch) => {
   try {
     dispatch({ type: ALL_BRAND_REQUEST });
-    const { data } = await axios.get("/api/v1/brands");
+    const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/brands`);
 
     dispatch({
       type: ALL_BRAND_SUCCESS,
@@ -75,7 +75,7 @@ export const singleBrand = (id) => async (dispatch) => {
   try {
     dispatch({ type: SINGLE_BRAND_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/brand/${id}`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/brand/${id}`);
 
     dispatch({
       type: SINGLE_BRAND_SUCCESS,
@@ -98,7 +98,7 @@ export const updateBrand = (id, brandData) => async (dispatch) => {
       },
     };
     const { data } = await axios.put(
-      `/api/v1/brand/${id}`,
+      `${process.env.REACT_APP_API}/api/v1/brand/${id}`,
       brandData,
       config
     );
@@ -127,7 +127,7 @@ export const resetDeleteBrand = () => (dispatch) => {
 export const deleteBrand = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BRAND_REQUEST });
-    const { data } = await axios.delete(`/api/v1/brand/${id}`);
+    const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/brand/${id}`);
     dispatch({
       type: DELETE_BRAND_SUCCESS,
       payload: data,
