@@ -15,6 +15,7 @@ import {
   Skeleton,
   Space,
   Switch,
+  Rate,
 } from "antd";
 import Carousel from "../../components/Navbar/CarouselProduct";
 import CarouselProduct2 from "../../components/Navbar/CarouselProduct2";
@@ -100,6 +101,23 @@ export default function Home() {
 
                     <div className="flex ">
                       <p className="font-semibold">${product.price}</p>
+                    </div>
+
+                    <Divider />
+
+                    <div className="flex gap-2 items-center">
+                      <div>
+                        <Rate
+                          disabled
+                          defaultValue={product.ratings}
+                          style={{ fontSize: 16 }}
+                        />
+                      </div>
+                      <div>
+                        <p className="text-zinc-500 text-xs">
+                          ({product?.reviews?.length})
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
