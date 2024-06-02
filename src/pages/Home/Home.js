@@ -16,6 +16,9 @@ import {
   Space,
   Switch,
 } from "antd";
+import Carousel from "../../components/Navbar/CarouselProduct";
+import CarouselProduct2 from "../../components/Navbar/CarouselProduct2";
+import CarouselProduct3 from "../../components/Navbar/CarouselProduct3";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -37,14 +40,35 @@ export default function Home() {
   return (
     <div className="flex-1 bg-zinc-100 ">
       <div className="flex flex-col container mx-auto">
-        <p className="text-2xl font-bold">Products</p>
+        {/* <p className="text-2xl font-bold">Products</p> */}
+        <div className="py-6 px-2">
+          <div className="grid grid-cols-3 grid-rows-2 gap-4">
+            <div className="col-span-2 row-span-2">
+              <Carousel />
+            </div>
+
+            <div className="col-start-3">
+              <CarouselProduct2 />
+            </div>
+
+            <div className="col-start-3">
+              <CarouselProduct3 />
+            </div>
+          </div>
+        </div>
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-auto gap-10 p-2">
             {[...Array(8)].map((_, index) => (
               <div key={index} className="space-y-3 ">
-                <Skeleton.Image active style={{ height: '22rem', width: '22rem', objectFit: 'cover' }} />
-
+                <Skeleton.Image
+                  active
+                  style={{
+                    height: "22rem",
+                    width: "22rem",
+                    objectFit: "cover",
+                  }}
+                />
 
                 <Skeleton active />
               </div>
