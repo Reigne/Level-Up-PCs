@@ -1,6 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AutoComplete, Input, message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { allProducts, clearErrors } from "../../actions/productActions";
 
 export default function Navbar() {
+  const { error, loading, success, products } = useSelector(
+    (state) => state.products
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(allProducts());
+
+    if (error) {
+      message.error(error);
+      dispatch(clearErrors());
+    }
+  }, [success, error, dispatch]);
+
+  const options = products.map((product) => ({
+    value: product.name, // Assuming each product has a 'name' property
+  }));
+
+  console.log("products", products);
+
   return (
     <nav className="flex items-center justify-between flex-wrap shadow-lg py-3 px-14">
       <div className="flex flex-col">
@@ -13,21 +37,31 @@ export default function Navbar() {
         <span className="text-xs">Power Up Your Game</span>
       </div>
 
-      <div className="flex flex-row space-x-8">
-        <div>
-          <a className="" href="/">Home</a>
-        </div>
-        <div>
-          <a className="">Shop</a>
-        </div>
-        <div>
-          <a className="">Contact</a>
-        </div>
+      <div>
+        <AutoComplete
+          style={{
+            width: 500,
+          }}
+          options={options}
+          filterOption={(inputValue, option) =>
+            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
+        >
+          <Input.Search size="large" placeholder="Search" enterButton />
+        </AutoComplete>
       </div>
 
       <div className="flex flex-row space-x-8 items-center">
+        <div>
+          <a className="" href="/">
+            Shop
+          </a>
+        </div>
+        <div>
+          <a className="">Cart</a>
+        </div>
         <a className="bg-blue-500 py-2 px-6 rounded-full" href="/signup">
-          <span className=" text-white" >Sign Up</span>
+          <span className=" text-white">Sign Up</span>
         </a>
         <div>
           <a className="" href="/login">
