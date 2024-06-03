@@ -5,6 +5,12 @@ import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_FAIL,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAIL,
 } from "../constants/userConstants";
 
 export const register = (userData) => async (dispatch) => {
@@ -29,11 +35,56 @@ export const register = (userData) => async (dispatch) => {
       payload: data.user,
     });
   } catch (error) {
-  
-    console.log("actions error", error.response.data.errMessage)
+    console.log("actions error", error.response.data.errMessage);
     dispatch({
       type: REGISTER_USER_FAIL,
       payload: error.response.data.errMessage,
+    });
+  }
+};
+
+export const login = (userData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOGIN_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post("/api/v1/login", userData, config);
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGIN_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USER_REQUEST });
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API}/api/v1/profile`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
+      payload: error.response.data.message,
     });
   }
 };

@@ -1,8 +1,54 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { Button, Input } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { login, clearErrors } from "../../actions/userActions";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  let location = useLocation();
+
+  const { isAuthenticated, error, loading } = useSelector(
+    (state) => state.auth
+  );
+
+  const validateForm = () => {
+    let errors = {};
+
+    if (!email) {
+      errors.email = "Email is required";
+    } else {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errors.email = "Invalid email address";
+      }
+    }
+
+    if (!password) errors.password = "Password is required";
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const loginHandler = () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("password", password);
+
+    dispatch(login(formData));
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <div className="bg-red-200 absolute top-[-6rem] -z-10 right-[11rem] h-[31.24rem] w-[31.25rem] rounded-full blur-[10rem]"></div>
@@ -20,14 +66,14 @@ export default function Login() {
               alt="Level Up"
             />
           </div> */}
-{/*           
+          {/*           
           <div className=" p-8">
             <p className="text-center text-4xl font-extrabold text-white">
               Level Up
             </p>
           </div> */}
 
-          <div className="p-6 space-y-8">
+          <form className="p-6 space-y-8">
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-4xl font-extrabold text-blue-500">Sign In</p>
 
@@ -38,19 +84,33 @@ export default function Login() {
               <div className="space-y-1">
                 <p>Email</p>
                 <Input
+                  status={errors.email ? "error" : null}
                   placeholder="levelup@example.com"
                   variant="filled"
                   size="large"
+                  type="email"
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
+                {errors.email && (
+                  <span className="text-red-500">{errors.email}</span>
+                )}
               </div>
 
               <div className="space-y-1">
                 <p>Password</p>
                 <Input.Password
+                  status={errors.password ? "error" : null}
                   placeholder="password"
                   variant="filled"
                   size="large"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
+                {errors.password && (
+                  <span className="text-red-500">{errors.password}</span>
+                )}
 
                 <a className="flex flex-row justify-end" href="">
                   <span className="text-sm text-red-500">Forgot Password?</span>
@@ -73,6 +133,7 @@ export default function Login() {
                 size="large"
                 // icon={<SearchOutlined />}
                 // iconPosition={position}
+                onClick={() => loginHandler()}
               >
                 Login
               </Button>
@@ -85,7 +146,7 @@ export default function Login() {
                 </span>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
