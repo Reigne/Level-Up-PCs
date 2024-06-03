@@ -14,8 +14,18 @@ export default function SignUp() {
 
   const { loading, error, success } = useSelector((state) => state.register);
 
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    } else {
+      console.log("no user")
+    }
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (error) {
