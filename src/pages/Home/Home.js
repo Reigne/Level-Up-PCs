@@ -78,9 +78,10 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-auto gap-4 p-2">
             {products.map((product) => (
-              <div
+              <a
                 key={product._id}
                 className="w-full bg-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300 shadow-lg"
+                href={`/product/${product._id}`}
               >
                 <div className="">
                   <img
@@ -121,7 +122,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         )}
