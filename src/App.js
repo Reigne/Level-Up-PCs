@@ -16,6 +16,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 import { loadUser } from "./actions/userActions";
 import store from "./store";
+import ProductSingle from "./pages/Product/ProductSingle";
 
 export default function App() {
   useEffect(() => {
@@ -32,7 +33,15 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/products" element={<Products />} />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/product/:id" element={<ProductSingle />} />
         <Route path="/product/create" element={<ProductForm />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/brands" element={<Brands />} />
