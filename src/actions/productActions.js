@@ -74,7 +74,9 @@ export const singleProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: SINGLE_PRODUCT_REQUEST });
 
-    const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/${id}`);
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API}/api/v1/product/${id}`
+    );
 
     dispatch({
       type: SINGLE_PRODUCT_SUCCESS,
@@ -126,7 +128,9 @@ export const resetDeleteProduct = () => (dispatch) => {
 export const deleteProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_PRODUCT_REQUEST });
-    const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/${id}`);
+    const { data } = await axios.delete(
+      `${process.env.REACT_APP_API}/api/v1/product/${id}`
+    );
     dispatch({
       type: DELETE_PRODUCT_SUCCESS,
       payload: data,
