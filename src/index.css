@@ -2,3 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-gallery .image-gallery-slide img {
+    width: 600px;  /* Adjust width */
+    height: 600px; /* Adjust height */
+    object-fit: contain; /* Ensure the image covers the container without stretching */
+  }
+  
+  .custom-gallery .image-gallery-thumbnail img {
+    width: 100px;  /* Adjust thumbnail width */
+    height: 100px; /* Adjust thumbnail height */
+    object-fit: cover; /* Ensure the thumbnail image covers the container without stretching */
+  }
+  
