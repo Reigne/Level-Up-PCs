@@ -37,6 +37,14 @@ export default function Home() {
     }
   }, [error, dispatch]);
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      minimumFractionDigits: 2,
+    }).format(price);
+  };
+
   console.log(products);
   return (
     <div className="flex-1 bg-zinc-100 ">
@@ -101,7 +109,9 @@ export default function Home() {
                     </div>
 
                     <div className="flex ">
-                      <p className="font-semibold">${product.price}</p>
+                      <p className="font-semibold text-red-500">
+                        {formatPrice(product?.price)}
+                      </p>
                     </div>
 
                     <Divider />
