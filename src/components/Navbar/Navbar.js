@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <nav className="flex items-center justify-between flex-wrap shadow-lg py-3 px-14">
-      <div className="flex flex-col">
+      <a className="flex flex-col" href="/">
         <div className="flex items-center flex-shrink-0">
           <span className="font-extrabold text-3xl tracking-normal">
             <span className="text-blue-500">Level Up</span>
@@ -35,7 +35,7 @@ export default function Navbar() {
         </div>
 
         <span className="text-xs">Power Up Your Game</span>
-      </div>
+      </a>
 
       <div>
         <AutoComplete
