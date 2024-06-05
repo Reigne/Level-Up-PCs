@@ -2,7 +2,16 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { singleProduct } from "../../actions/productActions";
-import { Breadcrumb, Button, Divider, Input, InputNumber, Rate } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Divider,
+  Input,
+  InputNumber,
+  Rate,
+  Flex,
+  Spin,
+} from "antd";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 
@@ -27,34 +36,50 @@ export default function ProductSingle() {
     );
   };
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      minimumFractionDigits: 2,
+    }).format(price);
+  };
+
   console.log(product, "product single");
 
   return (
     <div className="flex-1 bg-white">
       {loading ? (
-        <div>Loading...</div>
+        <div className="flex h-full justify-center">
+          <Flex align="center" gap="middle">
+            <Spin size="large" />
+          </Flex>
+        </div>
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
         <div>
-          <div className="container mx-auto bg py-4 space-y-4">
-            <Breadcrumb
-              items={[
-                {
-                  title: "Home",
-                },
-                {
-                  title: <a href="/">Shop</a>,
-                },
-                {
-                  title: <a href="">{product?.category?.name}</a>,
-                },
-                {
-                  title: <p href="">{product?.brand?.name}</p>,
-                },
-              ]}
-            />
+          <div className="flex bg-zinc-100">
+            <div className="container mx-auto py-4">
+              <Breadcrumb
+                items={[
+                  {
+                    title: "Home",
+                  },
+                  {
+                    title: <a href="/">Shop</a>,
+                  },
+                  {
+                    title: <a href="">{product?.category?.name}</a>,
+                  },
+                  {
+                    title: <p href="">{product?.brand?.name}</p>,
+                  },
+                ]}
+              />
+            </div>
+          </div>
 
+          <div className="container mx-auto bg py-4 space-y-4">
             <div className="flex gap-8">
               <div className="bg-zinc-100">
                 <ImageGallery
@@ -73,11 +98,13 @@ export default function ProductSingle() {
                 </div>
 
                 <div className="flex gap-2 items-center">
-                  <Rate
-                    disabled
-                    defaultValue={product.ratings}
-                    style={{ fontSize: 20 }}
-                  />
+                  <div>
+                    <Rate
+                      disabled
+                      defaultValue={product.ratings}
+                      style={{ fontSize: 20 }}
+                    />
+                  </div>
 
                   <p className="text-zinc-500 text-sm">
                     ({product.reviews?.length} reviews)
@@ -86,7 +113,7 @@ export default function ProductSingle() {
 
                 <div>
                   <p className="text-xl text-red-500 font-semibold">
-                    ₱{product.price}
+                    {formatPrice(product?.price)}
                   </p>
                 </div>
 
