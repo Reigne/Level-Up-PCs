@@ -80,8 +80,8 @@ export default function ProductSingle() {
           </div>
 
           <div className="container mx-auto bg py-4 space-y-4">
-            <div className="flex gap-8">
-              <div className="bg-zinc-100">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="bg-zinc-100 w-full lg:w-2/5 flex  justify-center">
                 <ImageGallery
                   items={getImageItems()}
                   showPlayButton={false}
@@ -92,7 +92,7 @@ export default function ProductSingle() {
                 />
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 w-full lg:w-3/5">
                 <div>
                   <p className="text-4xl font-bold">{product.name}</p>
                 </div>
@@ -119,7 +119,7 @@ export default function ProductSingle() {
 
                 <Divider />
 
-                <div className="w-[50rem]">
+                <div className="">
                   <p className="font-semibold text-zinc-600">Description</p>
                   <p className="text-zinc-600">{product.description}</p>
                 </div>
