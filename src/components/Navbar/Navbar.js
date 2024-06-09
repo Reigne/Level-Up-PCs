@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { AutoComplete, Input, message } from "antd";
+import { AutoComplete, Avatar, Input, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { allProducts, clearErrors } from "../../actions/productActions";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
+import {
+  ArchiveBoxXMarkIcon,
+  ArrowLeftStartOnRectangleIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  PencilIcon,
+  Square2StackIcon,
+  TrashIcon,
+  UserIcon,
+} from "@heroicons/react/16/solid";
+import { BsBoxSeam, BsBoxSeamFill } from "react-icons/bs";
 
 export default function Navbar() {
-  const { error, loading, success, products } = useSelector(
-    (state) => state.products
-  );
+  const { error, success, products } = useSelector((state) => state.products);
+  const { user, loading } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,14 +83,80 @@ export default function Navbar() {
         <div>
           <a className="">Cart</a>
         </div>
-        <a className="bg-blue-500 py-2 px-6 rounded-full" href="/signup">
-          <span className=" text-white">Sign Up</span>
-        </a>
-        <div>
-          <a className="" href="/login">
-            Sign In
-          </a>
-        </div>
+
+        {user ? (
+          <Menu>
+            <MenuButton className="inline-flex items-center gap-2 rounded-full bg-blue-500 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-blue-500/90 data-[focus]:outline-1 data-[focus]:outline-white">
+              <Avatar
+                src={user?.avatar?.url}
+                icon={<UserIcon className="w-4 h-4" />}
+              />
+              <span>{user.fullname}</span>
+              <ChevronDownIcon className="size-4 fill-white/60" />
+            </MenuButton>
+            <Transition
+              enter="transition ease-out duration-75"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <MenuItems
+                anchor="bottom end"
+                className="w-52 origin-top-right rounded-xl bg-blue-500/90 p-1 text-sm/6 text-white [--anchor-gap:var(--spacing-1)] focus:outline-none mt-1"
+              >
+                <MenuItem>
+                  <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                    <UserIcon className="size-4 fill-white/30" />
+                    Profile
+                    {/* <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">
+                      ⌘E
+                    </kbd> */}
+                  </button>
+
+                  {/* <div className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                    <Avatar
+                      src={user?.avatar?.url}
+                      icon={<UserIcon className="w-4 h-4" />}
+                    />
+                    <span>{user.fullname}</span>
+                  </div> */}
+                </MenuItem>
+                <MenuItem>
+                  <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                    <BsBoxSeamFill className="size-4 fill-white/30" />
+                    My Orders
+                    {/* <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">
+                      ⌘A
+                    </kbd> */}
+                  </button>
+                </MenuItem>
+                <div className="my-1 h-px bg-white/5" />
+                <MenuItem>
+                  <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                    <ArrowLeftStartOnRectangleIcon className="size-4 fill-white/30" />
+                    Logout
+                    {/* <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">
+                      ⌘D
+                    </kbd> */}
+                  </button>
+                </MenuItem>
+              </MenuItems>
+            </Transition>
+          </Menu>
+        ) : (
+          <>
+            <a className="bg-blue-500 py-2 px-6 rounded-full" href="/signup">
+              <span className=" text-white">Sign Up</span>
+            </a>
+            <div>
+              <a className="" href="/login">
+                Sign In
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </nav>
   );
