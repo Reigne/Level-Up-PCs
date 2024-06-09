@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearErrors } from "../../actions/userActions";
 
@@ -17,6 +17,18 @@ export default function Login() {
   const { isAuthenticated, error, loading } = useSelector(
     (state) => state.auth
   );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      message.success("Login Successfully");
+      navigate("/");
+    }
+    if (error) {
+      console.log("Error", error);
+      message.error(error);
+      dispatch(clearErrors());
+    }
+  }, [dispatch, isAuthenticated, error, navigate]);
 
   const validateForm = () => {
     let errors = {};
