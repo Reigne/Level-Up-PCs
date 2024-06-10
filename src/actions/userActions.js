@@ -56,7 +56,7 @@ export const login = (userData) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const { data } = await axios.post("/api/v1/login", userData, config);
+    const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/login`, userData, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -93,7 +93,7 @@ export const loadUser = () => async (dispatch) => {
 
 export const Logout = () => async (dispatch) => {
   try {
-    await axios.get("/api/v1/logout");
+    await axios.get(`${process.env.REACT_APP_API}/api/v1/logout`);
     dispatch({
       type: LOGOUT_SUCCESS,
     });
