@@ -22,10 +22,11 @@ import {
   UserIcon,
 } from "@heroicons/react/16/solid";
 import { BsBoxSeam, BsBoxSeamFill } from "react-icons/bs";
+import { Logout } from "../../actions/userActions";
 
 export default function Navbar() {
   const { error, success, products } = useSelector((state) => state.products);
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading, isLogout} = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,7 +38,11 @@ export default function Navbar() {
       message.error(error);
       dispatch(clearErrors());
     }
-  }, [success, error, dispatch]);
+
+    if (isLogout) {
+      message.success("Logout Successfully")
+    }
+  }, [success, error, dispatch, isLogout]);
 
   const options = products.map((product) => ({
     value: product.name, // Assuming each product has a 'name' property
@@ -46,6 +51,13 @@ export default function Navbar() {
 
   const handleSelect = (value, option) => {
     navigate(`/product/${option.id}`);
+  };
+
+  const logoutHandler = () => {
+    dispatch(Logout());
+    navigate("/");
+
+  
   };
 
   return (
@@ -134,7 +146,10 @@ export default function Navbar() {
                 </MenuItem>
                 <div className="my-1 h-px bg-white/5" />
                 <MenuItem>
-                  <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                  <button
+                    className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
+                    onClick={() => logoutHandler()}
+                  >
                     <ArrowLeftStartOnRectangleIcon className="size-4 fill-white/30" />
                     Logout
                     {/* <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">

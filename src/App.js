@@ -24,7 +24,7 @@ export default function App() {
   }, []);
 
   const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
-
+  
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
